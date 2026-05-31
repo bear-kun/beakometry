@@ -28,21 +28,26 @@ public:
   Color color{};
   std::string name;
 
-  void update(GeomId cid, const Transform &xform);
+  void update(const CGeometry *g, const Transform &xform);
 
-  bool select_try(Vec2 pos) const;
+  bool hovered(Vec2 pos) const;
 
   void draw() const;
 
   void draw_name() const;
 
+  void remove() {
+    exist = false;
+    version = 0;
+  }
+
   void select() { selected = true; }
 
   void deselect() { selected = false; }
 
-private:
   bool visible() const { return exist && valid; }
 
+private:
   using Point = Vec2;
 
   struct Line {

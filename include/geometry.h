@@ -15,8 +15,8 @@ typedef struct {
   GeomId args[5];
 } CGeometry;
 
-void geom_core_init();
-void geom_core_cleanup();
+void geometry_core_init();
+void geometry_core_cleanup();
 
 GeomId object_find(const char *name);
 CGeometry *geom_get_object(GeomId id);

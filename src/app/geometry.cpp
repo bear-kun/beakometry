@@ -51,10 +51,9 @@ Vec2 Transform::inv(const Vec2 &pt) const {
   return scaled;
 }
 
-void Geometry::update(const GeomId cid, const Transform &xform) {
+void Geometry::update(const CGeometry *g, const Transform &xform) {
   exist = true;
 
-  const CGeometry *g = geom_get_object(cid);
   const unsigned g_version = geom_get_version(g);
   if (version == g_version) return;
   version = g_version;
@@ -97,7 +96,7 @@ static float dist(const Vec2 &p, const Vec2 &q) {
   return sqrtf(dx * dx + dy * dy);
 }
 
-bool Geometry::select_try(const Vec2 pos) const {
+bool Geometry::hovered(const Vec2 pos) const {
   if (!visible()) return false;
 
   switch (type) {

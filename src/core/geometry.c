@@ -18,7 +18,7 @@ static uint64_t ctz(uint64_t value);
 static GeomId alloc_object();
 static void remove_object(GeomId id);
 
-void geom_core_init() {
+void geometry_core_init() {
   const GeomSize init_size = 128;
 
   intl.capacity = init_size;
@@ -30,7 +30,7 @@ void geom_core_init() {
   computation_graph_init(init_size * 4);
 }
 
-void geom_core_cleanup() {
+void geometry_core_cleanup() {
   free(intl.indices);
   free(intl.bitmap);
   free(intl.array);
