@@ -7,23 +7,23 @@ static Vec2 operator+(const Vec2 &lhs, const Vec2 &rhs) {
   return {lhs.x + rhs.x, lhs.y + rhs.y};
 }
 
-static  Vec2 operator+(const Vec2 &lhs, const float rhs) {
+static Vec2 operator+(const Vec2 &lhs, const float rhs) {
   return {lhs.x + rhs, lhs.y + rhs};
 }
 
-static  Vec2 operator-(const Vec2 &lhs, const Vec2 &rhs) {
+static Vec2 operator-(const Vec2 &lhs, const Vec2 &rhs) {
   return {lhs.x - rhs.x, lhs.y - rhs.y};
 }
 
-static  Vec2 operator-(const Vec2 &lhs, const float rhs) {
+static Vec2 operator-(const Vec2 &lhs, const float rhs) {
   return {lhs.x - rhs, lhs.y - rhs};
 }
 
-static  Vec2 operator*(const Vec2 &lhs, const float rhs) {
+static Vec2 operator*(const Vec2 &lhs, const float rhs) {
   return {lhs.x * rhs, lhs.y * rhs};
 }
 
-static  Vec2 operator/(const Vec2 &lhs, const float rhs) {
+static Vec2 operator/(const Vec2 &lhs, const float rhs) {
   return {lhs.x / rhs, lhs.y / rhs};
 }
 
@@ -50,17 +50,59 @@ Vec2 Transform::inv(const Vec2 &pt) const {
   return scaled;
 }
 
-void Geometry::update(const CGeometry *g, const Transform &xform) {
-  exist = true;
 
-  const unsigned g_version = geom_get_version(g);
+static void u2str(char *str, unsigned x) {
+  str += x / 10 ;
+  while (x) {
+    *str++ = static_cast<char>('0' + x % 10);
+    x /= 10;
+  }
+}
+
+static void get_default_name(std::string &name, const GeomType type) {
+  static unsigned point = 0, line = 0, circle = 0;
+  name.assign(8, 0);
+  switch (type) {
+  case POINT:
+    name[0] = static_cast<char>('A' + point % 26);
+    u2str(name.data() + 1, point / 26);
+    point++;
+    return;
+  case LINE:
+    name[0] = static_cast<char>('a' + line % 26);
+    u2str(name.data() + 1, line / 26);
+    if (line++ % 26 == 'c' - 'a' - 1) line++;
+    return;
+  default:
+    name[0] = 'c';
+    u2str(name.data() + 1, circle++);
+  }
+}
+
+
+void Geometry::init(const GeomId cid, const Transform &xform) {
+  exist = true;
+  type = geom_get_type(cid);
+  if (type == POINT) {
+    color = {0, 82, 172, 255};
+  } else {
+    color = {130, 130, 130, 255};
+  }
+
+  get_default_name(name, type);
+  update(cid, xform);
+}
+
+
+void Geometry::update(const GeomId cid, const Transform &xform) {
+  const unsigned g_version = geom_get_version(cid);
   if (version == g_version) return;
   version = g_version;
 
-  switch (g->type) {
+  switch (geom_get_type(cid)) {
   case POINT: {
     float xy[2];
-    valid = geom_get_point(g, xy);
+    valid = geom_get_point(cid, xy);
     if (!valid) return;
 
     geom.pt = xform(xy);
@@ -69,7 +111,7 @@ void Geometry::update(const CGeometry *g, const Transform &xform) {
   }
   case LINE: {
     float pt1[2], pt2[2];
-    valid = geom_get_line(g, pt1, pt2);
+    valid = geom_get_line(cid, pt1, pt2);
     if (!valid) return;
 
     geom.ln.point1 = xform(pt1);
@@ -79,7 +121,7 @@ void Geometry::update(const CGeometry *g, const Transform &xform) {
   }
   default: {
     float center[2], radius;
-    valid = geom_get_circle(g, center, &radius);
+    valid = geom_get_circle(cid, center, &radius);
     if (!valid) return;
 
     geom.cr.center = xform(center);
@@ -146,7 +188,7 @@ void Geometry::draw() const {
 }
 
 void Geometry::draw_name() const {
-  static const Font font =rl::get_font_default();
+  static const Font font = rl::get_font_default();
   if (!visible()) return;
   rl::draw_text_ex(font, name.c_str(), name_pos, 20, 1, selected ? selected_color : color);
 }

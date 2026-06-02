@@ -18,17 +18,17 @@ public:
 
   void down(const Vec2 pos) override {
     const GeomId id = board::get_hovered_object();
-    if (id == -1 || geom_get_object(id)->type != POINT) {
+    if (id == -1 || geom_get_type(id) != POINT) {
       reset();
       return;
     }
     object = id;
     from = board::xform_to_world(pos);
     board::select_object(id);
-
   }
 
   void up(const Vec2 pos) override {
+    if (object == -1) return;
     const Vec2 to = board::xform_to_world(pos);
     command::push(std::make_unique<command::Move>(object, from, to));
     reset();

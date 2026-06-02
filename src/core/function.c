@@ -2,6 +2,8 @@
 #include "graph.h"
 #include <math.h>
 
+CGeometry *geom_get_object(GeomId id);
+
 static void copy_args(GeomId *dst, const GeomId *src, const int n) {
   for (int i = 0; i < n; i++) dst[i] = src[i];
 }
@@ -22,12 +24,14 @@ static GeomId create_point(const GeomId xy[2], const GeomId define, const GeomId
 }
 
 // --- basis ---
-bool geom_get_point(const CGeometry *pt, float xy[2]) {
+bool geom_get_point(const GeomId id, float xy[2]) {
+  const CGeometry *pt = geom_get_object(id);
   if (pt->define != -1 && graph_is_degenerate(pt->define, pt->soln_id)) return false;
   return graph_get_values(2, pt->args, xy);
 }
 
-bool geom_get_line(const CGeometry *ln, float pt1[2], float pt2[2]) {
+bool geom_get_line(const GeomId id, float pt1[2], float pt2[2]) {
+  const CGeometry *ln = geom_get_object(id);
   if (ln->define != -1 && graph_is_degenerate(ln->define, ln->soln_id)) return false;
 
   float args[5];
@@ -42,7 +46,8 @@ bool geom_get_line(const CGeometry *ln, float pt1[2], float pt2[2]) {
   return true;
 }
 
-bool geom_get_circle(const CGeometry *cr, float center[2], float *radius) {
+bool geom_get_circle(const GeomId id, float center[2], float *radius) {
+  const CGeometry *cr = geom_get_object(id);
   if (cr->define != -1 && graph_is_degenerate(cr->define, cr->soln_id)) return false;
 
   float args[3];
@@ -548,5 +553,5 @@ void geom_isect(const GeomId g1, const GeomId g2, GeomId out[2]) {
 // --- move ---
 void geom_move(const GeomId pt, const float to[2]) {
   const CGeometry *p = geom_get_object(pt);
-  graph_change_value(2, p->args + 2, (float *)&to);
+  graph_change_value(2, p->args + 2, to);
 }

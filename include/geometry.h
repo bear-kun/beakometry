@@ -18,16 +18,16 @@ void geometry_core_init();
 void geometry_core_cleanup();
 
 GeomId object_find(const char *name);
-CGeometry *geom_get_object(GeomId id);
-unsigned geom_get_version(const CGeometry *obj);
+GeomType geom_get_type(GeomId id);
+unsigned geom_get_version(GeomId id);
 GeomId geom_new_object(GeomType type, const GeomId *args, GeomId define, GeomId soln_id);
 void geom_delete_object(GeomId id);
 void geom_delete_all_object();
-void geom_traverse_objects(void (*callback)(GeomId id, const CGeometry *));
+void geom_traverse_objects(void (*callback)(GeomId id));
 
-bool geom_get_point(const CGeometry *pt, float xy[2]);
-bool geom_get_line(const CGeometry *ln, float pt1[2], float pt2[2]);
-bool geom_get_circle(const CGeometry *cr, float center[2], float *radius);
+bool geom_get_point(GeomId id, float xy[2]);
+bool geom_get_line(GeomId id, float pt1[2], float pt2[2]);
+bool geom_get_circle(GeomId id, float center[2], float *radius);
 
 GeomId geom_new_point(float x, float y, GeomId on);
 GeomId geom_new_line(GeomId pt1, GeomId pt2);

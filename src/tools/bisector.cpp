@@ -18,9 +18,7 @@ public:
 
   void click(Vec2) override {
     const GeomId id = board::get_hovered_object();
-    if (id == -1) return;
-    const CGeometry *obj = geom_get_object(id);
-    if (obj->type != LINE) return;
+    if (id == -1 || geom_get_type(id) != LINE) return;
 
     if (first != -1) {
       if (!board::object_exist(first)) {

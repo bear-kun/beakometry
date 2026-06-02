@@ -10,7 +10,7 @@ public:
 
   void click(Vec2) override {
     const GeomId id = board::get_hovered_object();
-    if (id != -1) return;
+    if (id == -1) return;
     command::push(std::make_unique<command::Delete>(1, &id));
   }
 

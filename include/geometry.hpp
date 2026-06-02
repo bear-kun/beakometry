@@ -29,7 +29,9 @@ public:
   Color color{};
   std::string name;
 
-  void update(const CGeometry *g, const Transform &xform);
+  void init(GeomId cid, const Transform &xform);
+
+  void update(GeomId cid, const Transform &xform);
 
   bool hovered(Vec2 pos) const;
 

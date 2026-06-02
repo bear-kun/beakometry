@@ -5,15 +5,13 @@
 namespace app::toolbar {
 GeomId find_or_push_point(const GeomId hovered, const Vec2 pos) {
   GeomId pt;
-  const Vec2 world_pos = board::xform_to_world(pos);
+  const auto [x, y] = board::xform_to_world(pos);
 
   if (hovered == -1) {
-    pt = geom_new_point(world_pos.x, world_pos.y, -1);
+    pt = geom_new_point(x, y, -1);
   } else {
-    const CGeometry *obj = geom_get_object(hovered);
-    if (obj->type == POINT) return hovered;
-
-    pt = geom_new_point(world_pos.x, world_pos.y, hovered);
+    if (geom_get_type(hovered) == POINT) return hovered;
+    pt = geom_new_point(x, y, hovered);
   }
 
   command::push(std::make_unique<command::Add>(1, &pt));

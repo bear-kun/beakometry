@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-static const GeomSize type_argc_in[] = {0, 4, 5, 0, 3};
-static const GeomSize type_argc_out[] = {0, 2, 5, 0, 3};
+static const int type_argc_in[] = {0, 4, 5, 0, 3};
+static const int type_argc_out[] = {0, 2, 5, 0, 3};
 
 static struct {
   GeomSize capacity, size, range;
@@ -39,12 +39,15 @@ void geometry_core_cleanup() {
 
 CGeometry *geom_get_object(const GeomId id) { return intl.array + id; }
 
-unsigned geom_get_version(const CGeometry *obj) {
+GeomType geom_get_type(const GeomId id) { return intl.array[id].type; }
+
+unsigned geom_get_version(const GeomId id) {
+  const CGeometry *obj = geom_get_object(id);
   return graph_get_version(type_argc_out[obj->type], obj->args);
 }
 
 GeomId geom_new_object(const GeomType type, const GeomId *args,
-                     const GeomId define, const GeomId soln_id) {
+                       const GeomId define, const GeomId soln_id) {
   const GeomId id = alloc_object();
   CGeometry *obj = intl.array + id;
   obj->type = type;
@@ -73,13 +76,13 @@ void geom_delete_all_object() {
   computation_graph_clear();
 }
 
-void geom_traverse_objects(void (*callback)(GeomId id, const CGeometry *)) {
+void geom_traverse_objects(void (*callback)(GeomId id)) {
   for (GeomSize i = 0; i < intl.capacity; i += 64) {
     uint64_t bitmap = intl.bitmap[i >> 6];
     while (bitmap) {
       const uint64_t j = ctz(bitmap);
       const GeomId id = (GeomId)(i | j);
-      callback(id, intl.array + id);
+      callback(id);
       bitmap &= bitmap - 1;
     }
   }
@@ -98,36 +101,6 @@ static uint64_t ctz(const uint64_t value) {
   return res;
 }
 #endif
-
-/*
-static void u2str(char *str, unsigned x) {
-  str += x / 10 ;
-  while (x) {
-    *str++ = (char)('0' + x % 10);
-    x /= 10;
-  }
-}
-
-static void get_default_name(char *name, const ObjectType type) {
-  static unsigned point = 0, line = 0, circle = 0;
-  memset(name, 0, sizeof(((GeomObject *)0)->name));
-  switch (type) {
-  case POINT:
-    name[0] = (char)('A' + point % 26);
-    u2str(name + 1, point / 26);
-    point++;
-    return;
-  case LINE:
-    name[0] = (char)('a' + line % 26);
-    u2str(name + 1, line / 26);
-    if (line++ % 26 == 'c' - 'a' - 1) line++;
-    return;
-  default:
-    name[0] = 'c';
-    u2str(name + 1, circle++);
-  }
-}
-*/
 
 static void resize_objects() {
   const GeomSize half_cap = intl.capacity;
@@ -158,7 +131,7 @@ static GeomId alloc_object() {
 }
 
 static void remove_object(const GeomId id) {
-  for (GeomId i = 0; i < intl.size; i++) {
+  for (GeomSize i = 0; i < intl.size; i++) {
     if (intl.indices[i] == id) {
       intl.indices[i] = intl.indices[intl.size - 1];
       intl.indices[intl.size - 1] = id;

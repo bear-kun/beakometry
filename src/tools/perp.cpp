@@ -20,15 +20,13 @@ public:
   static GeomId get_required(const Vec2 pos) {
     const GeomId hovered = board::get_hovered_object();
     if (hovered == -1) return find_or_push_point(hovered, pos);
-    const CGeometry *obj = geom_get_object(hovered);
-    if (obj->type & (POINT | LINE)) return hovered;
+    if (geom_get_type(hovered) & (POINT | LINE)) return hovered;
     return find_or_push_point(hovered, pos);
   }
 
   void click(const Vec2 pos) override {
     const GeomId id = get_required(pos);
-    const CGeometry *obj = geom_get_object(id);
-    const GeomType type = obj->type;
+    const GeomType type = geom_get_type(id);
 
     if (first_id != -1) {
       if (!board::object_exist(first_id)) {

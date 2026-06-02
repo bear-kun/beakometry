@@ -97,10 +97,9 @@ bool object_exist(const GeomId id) {
 }
 
 void add_object(const GeomId id) {
-  const CGeometry *g_obj = geom_get_object(id);
-  board.objects[id].update(g_obj, board.xform);
+  board.objects[id].init(id, board.xform);
 
-  switch (g_obj->type) {
+  switch (geom_get_type(id)) {
   case POINT:
     board.points.push_back(id);
     break;
@@ -138,12 +137,10 @@ void remove_object(const GeomId id) {
   obj.remove();
 }
 
-static void board_update_objects_h(const GeomId id, const CGeometry *obj) {
-  board.objects[id].update(obj, board.xform);
-}
-
 void update_objects() {
-  geom_traverse_objects(board_update_objects_h);
+  geom_traverse_objects([](const GeomId id) {
+    board.objects[id].update(id, board.xform);
+  });
 }
 
 GeomId get_hovered_object() {
