@@ -6,8 +6,8 @@
 #include <string>
 
 namespace app {
-using Vec2 = Vector2;
-using Color = Color;
+using Vec2 = rl::Vector2;
+using Color = rl::Color;
 
 class Transform {
 public:

@@ -6,8 +6,8 @@
 
 namespace app::board {
 static struct {
-  Rectangle window{};
-  Font font{};
+  rl::Rectangle window{};
+  rl::Font font{};
 
   Control *control = nullptr;
   GeomId hovered_object = -1;
@@ -43,9 +43,9 @@ void listen() {
   if (board.control == nullptr) return;
 
   // redo & undo
-  if (rl::is_key_down(KEY_LEFT_CONTROL) || rl::is_key_down(KEY_RIGHT_CONTROL)) {
-    if (rl::is_key_pressed(KEY_Z)) {
-      if (rl::is_key_down(KEY_LEFT_SHIFT) || rl::is_key_down(KEY_RIGHT_SHIFT)) {
+  if (rl::is_key_down(rl::KEY_LEFT_CONTROL) || rl::is_key_down(rl::KEY_RIGHT_CONTROL)) {
+    if (rl::is_key_pressed(rl::KEY_Z)) {
+      if (rl::is_key_down(rl::KEY_LEFT_SHIFT) || rl::is_key_down(rl::KEY_RIGHT_SHIFT)) {
         command::redo();
       } else {
         command::undo();
@@ -59,18 +59,18 @@ void listen() {
   // set mouse cursor when mouse hovering
   board.hovered_object = board_hover_object(pos);
   if (board.hovered_object != -1) {
-    rl::set_mouse_cursor(MOUSE_CURSOR_POINTING_HAND);
+    rl::set_mouse_cursor(rl::MOUSE_CURSOR_POINTING_HAND);
   } else {
-    rl::set_mouse_cursor(MOUSE_CURSOR_DEFAULT);
+    rl::set_mouse_cursor(rl::MOUSE_CURSOR_DEFAULT);
   }
 
   // mouse event
-  if (rl::is_mouse_button_pressed(MOUSE_BUTTON_LEFT)) {
+  if (rl::is_mouse_button_pressed(rl::MOUSE_BUTTON_LEFT)) {
     down_pos = pos;
     board.control->down(pos);
     return;
   }
-  if (rl::is_mouse_button_released(MOUSE_BUTTON_LEFT)) {
+  if (rl::is_mouse_button_released(rl::MOUSE_BUTTON_LEFT)) {
     if (rl::check_collision_point_circle(pos, down_pos, 8)) {
       board.control->click(down_pos);
     }
@@ -80,7 +80,7 @@ void listen() {
 
   if (rl::check_collision_point_circle(pos, down_pos, 8)) return;
 
-  if (rl::is_mouse_button_down(MOUSE_BUTTON_LEFT)) {
+  if (rl::is_mouse_button_down(rl::MOUSE_BUTTON_LEFT)) {
     board.control->drag(pos);
     return;
   }

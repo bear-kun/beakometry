@@ -188,7 +188,7 @@ void Geometry::draw() const {
 }
 
 void Geometry::draw_name() const {
-  static const Font font = rl::get_font_default();
+  static const rl::Font font = rl::get_font_default();
   if (!visible()) return;
   rl::draw_text_ex(font, name.c_str(), name_pos, 20, 1, selected ? selected_color : color);
 }

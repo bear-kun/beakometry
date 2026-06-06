@@ -1,187 +1,122 @@
-#ifndef RAYLIB_H
-#define RAYLIB_H
+#ifndef RAYLIB_HPP
+#define RAYLIB_HPP
 
-#include <cstdarg> // Required for: va_list - Only used by TraceLogCallback
+#include <cstdarg>
 
-//----------------------------------------------------------------------------------
-// Some basic Defines
-//----------------------------------------------------------------------------------
-#ifndef PI
-#define PI 3.14159265358979323846f
-#endif
-#ifndef DEG2RAD
-#define DEG2RAD (PI / 180.0f)
-#endif
-#ifndef RAD2DEG
-#define RAD2DEG (180.0f / PI)
-#endif
-
-// NOTE: MSVC C++ compiler does not support compound literals (C99 feature)
-// Plain structures in C++ (without constructors) can be initialized with { }
-// This is called aggregate initialization (C++11 feature)
-#if defined(__cplusplus)
-#define CLITERAL(type) type
-#else
-#define CLITERAL(type) (type)
-#endif
-
-// NOTE: We set some defines with some data types declared by raylib
-// Other modules (raymath, rlgl) also require some of those types, so,
-// to be able to use those other modules as standalone (not depending on raylib)
-// this defines are very useful for internal check and avoid type
-// (re)definitions
-#define RL_COLOR_TYPE
-#define RL_RECTANGLE_TYPE
-#define RL_VECTOR2_TYPE
-#define RL_VECTOR3_TYPE
-#define RL_VECTOR4_TYPE
-#define RL_QUATERNION_TYPE
-#define RL_MATRIX_TYPE
-
-// Some Basic Colors
-// NOTE: Custom raylib color palette for amazing visuals on WHITE background
-#define LIGHTGRAY CLITERAL(Color){200, 200, 200, 255} // Light Gray
-#define GRAY CLITERAL(Color){130, 130, 130, 255}      // Gray
-#define DARKGRAY CLITERAL(Color){80, 80, 80, 255}     // Dark Gray
-#define YELLOW CLITERAL(Color){253, 249, 0, 255}      // Yellow
-#define GOLD CLITERAL(Color){255, 203, 0, 255}        // Gold
-#define ORANGE CLITERAL(Color){255, 161, 0, 255}      // Orange
-#define PINK CLITERAL(Color){255, 109, 194, 255}      // Pink
-#define RED CLITERAL(Color){230, 41, 55, 255}         // Red
-#define MAROON CLITERAL(Color){190, 33, 55, 255}      // Maroon
-#define GREEN CLITERAL(Color){0, 228, 48, 255}        // Green
-#define LIME CLITERAL(Color){0, 158, 47, 255}         // Lime
-#define DARKGREEN CLITERAL(Color){0, 117, 44, 255}    // Dark Green
-#define SKYBLUE CLITERAL(Color){102, 191, 255, 255}   // Sky Blue
-#define BLUE CLITERAL(Color){0, 121, 241, 255}        // Blue
-#define DARKBLUE CLITERAL(Color){0, 82, 172, 255}     // Dark Blue
-#define PURPLE CLITERAL(Color){200, 122, 255, 255}    // Purple
-#define VIOLET CLITERAL(Color){135, 60, 190, 255}     // Violet
-#define DARKPURPLE CLITERAL(Color){112, 31, 126, 255} // Dark Purple
-#define BEIGE CLITERAL(Color){211, 176, 131, 255}     // Beige
-#define BROWN CLITERAL(Color){127, 106, 79, 255}      // Brown
-#define DARKBROWN CLITERAL(Color){76, 63, 47, 255}    // Dark Brown
-
-#define WHITE CLITERAL(Color){255, 255, 255, 255} // White
-#define BLACK CLITERAL(Color){0, 0, 0, 255}       // Black
-#define BLANK CLITERAL(Color){0, 0, 0, 0}         // Blank (Transparent)
-#define MAGENTA CLITERAL(Color){255, 0, 255, 255} // Magenta
-#define RAYWHITE                                                               \
-  CLITERAL(Color){245, 245, 245, 255} // My own White (raylib logo)
-
+namespace rl {
 // Vector2, 2 components
-typedef struct Vector2 {
+struct Vector2 {
   float x; // Vector x component
   float y; // Vector y component
-} Vector2;
+};
 
 // Vector3, 3 components
-typedef struct Vector3 {
+struct Vector3 {
   float x; // Vector x component
   float y; // Vector y component
   float z; // Vector z component
-} Vector3;
+};
 
 // Vector4, 4 components
-typedef struct Vector4 {
+struct Vector4 {
   float x; // Vector x component
   float y; // Vector y component
   float z; // Vector z component
   float w; // Vector w component
-} Vector4;
+};
 
 // Quaternion, 4 components (Vector4 alias)
-typedef Vector4 Quaternion;
+using Quaternion = Vector4;
 
 // Matrix, 4x4 components, column major, OpenGL style, right-handed
-typedef struct Matrix {
+struct Matrix {
   float m0, m4, m8, m12; // Matrix first row (4 components)
   float m1, m5, m9, m13; // Matrix second row (4 components)
   float m2, m6, m10, m14; // Matrix third row (4 components)
   float m3, m7, m11, m15; // Matrix fourth row (4 components)
-} Matrix;
+};
 
 // Color, 4 components, R8G8B8A8 (32bit)
-typedef struct Color {
+struct Color {
   unsigned char r; // Color red value
   unsigned char g; // Color green value
   unsigned char b; // Color blue value
   unsigned char a; // Color alpha value
-} Color;
+};
 
 // Rectangle, 4 components
-typedef struct Rectangle {
+struct Rectangle {
   float x; // Rectangle top-left corner position x
   float y; // Rectangle top-left corner position y
   float width; // Rectangle width
   float height; // Rectangle height
-} Rectangle;
+};
 
 // Image, pixel data stored in CPU memory (RAM)
-typedef struct Image {
+struct Image {
   void *data; // Image raw data
   int width; // Image base width
   int height; // Image base height
   int mipmaps; // Mipmap levels, 1 by default
   int format; // Data format (PixelFormat type)
-} Image;
+};
 
 // Texture, tex data stored in GPU memory (VRAM)
-typedef struct Texture {
+struct Texture {
   unsigned int id; // OpenGL texture id
   int width; // Texture base width
   int height; // Texture base height
   int mipmaps; // Mipmap levels, 1 by default
   int format; // Data format (PixelFormat type)
-} Texture;
+};
 
 // Texture2D, same as Texture
-typedef Texture Texture2D;
+using Texture2D = Texture;
 
 // TextureCubemap, same as Texture
-typedef Texture TextureCubemap;
+using TextureCubemap = Texture;
 
 // RenderTexture, fbo for texture rendering
-typedef struct RenderTexture {
+struct RenderTexture {
   unsigned int id; // OpenGL framebuffer object id
   Texture texture; // Color buffer attachment texture
   Texture depth; // Depth buffer attachment texture
-} RenderTexture;
+};
 
 // RenderTexture2D, same as RenderTexture
-typedef RenderTexture RenderTexture2D;
+using RenderTexture2D = RenderTexture;
 
 // NPatchInfo, n-patch layout info
-typedef struct NPatchInfo {
+struct NPatchInfo {
   Rectangle source; // Texture source rectangle
   int left; // Left border offset
   int top; // Top border offset
   int right; // Right border offset
   int bottom; // Bottom border offset
   int layout; // Layout of the n-patch: 3x3, 1x3 or 3x1
-} NPatchInfo;
+};
 
 // GlyphInfo, font characters glyphs info
-typedef struct GlyphInfo {
+struct GlyphInfo {
   int value; // Character value (Unicode)
   int offsetX; // Character offset X when drawing
   int offsetY; // Character offset Y when drawing
   int advanceX; // Character advance position X
   Image image; // Character image data
-} GlyphInfo;
+};
 
 // Font, font texture and GlyphInfo array data
-typedef struct Font {
+struct Font {
   int baseSize; // Base size (default chars height)
   int glyphCount; // Number of glyph characters
   int glyphPadding; // Padding around the glyph characters
   Texture2D texture; // Texture atlas containing the glyphs
   Rectangle *recs; // Rectangles in texture for the glyphs
   GlyphInfo *glyphs; // Glyphs info data
-} Font;
+};
 
 // Camera, defines position/orientation in 3d space
-typedef struct Camera3D {
+struct Camera3D {
   Vector3 position; // Camera position
   Vector3 target; // Camera target it looks-at
   Vector3 up; // Camera up vector (rotation over its axis)
@@ -189,20 +124,20 @@ typedef struct Camera3D {
   // used as near plane width in orthographic
   int projection; // Camera projection: CAMERA_PERSPECTIVE or
   // CAMERA_ORTHOGRAPHIC
-} Camera3D;
+};
 
-typedef Camera3D Camera; // Camera type fallback, defaults to Camera3D
+using Camera = Camera3D; // Camera type fallback, defaults to Camera3D
 
 // Camera2D, defines position/orientation in 2d space
-typedef struct Camera2D {
+struct Camera2D {
   Vector2 offset; // Camera offset (displacement from target)
   Vector2 target; // Camera target (rotation and zoom origin)
   float rotation; // Camera rotation in degrees
   float zoom; // Camera zoom (scaling), should be 1.0f by default
-} Camera2D;
+};
 
 // Mesh, vertex data and vao/vbo
-typedef struct Mesh {
+struct Mesh {
   int vertexCount; // Number of vertices stored in arrays
   int triangleCount; // Number of triangles stored (indexed or not)
 
@@ -236,43 +171,43 @@ typedef struct Mesh {
   // OpenGL identifiers
   unsigned int vaoId; // OpenGL Vertex Array Object id
   unsigned int *vboId; // OpenGL Vertex Buffer Objects id (default vertex data)
-} Mesh;
+};
 
 // Shader
-typedef struct Shader {
+struct Shader {
   unsigned int id; // Shader program id
   int *locs; // Shader locations array (RL_MAX_SHADER_LOCATIONS)
-} Shader;
+};
 
 // MaterialMap
-typedef struct MaterialMap {
+struct MaterialMap {
   Texture2D texture; // Material map texture
   Color color; // Material map color
   float value; // Material map value
-} MaterialMap;
+};
 
 // Material, includes shader and maps
-typedef struct Material {
+struct Material {
   Shader shader; // Material shader
   MaterialMap *maps; // Material maps array (MAX_MATERIAL_MAPS)
   float params[4]; // Material generic parameters (if required)
-} Material;
+};
 
 // Transform, vertex transformation data
-typedef struct Transform {
+struct Transform {
   Vector3 translation; // Translation
   Quaternion rotation; // Rotation
   Vector3 scale; // Scale
-} Transform;
+};
 
 // Bone, skeletal animation bone
-typedef struct BoneInfo {
+struct BoneInfo {
   char name[32]; // Bone name
   int parent; // Bone parent
-} BoneInfo;
+};
 
 // Model, meshes, materials and animation data
-typedef struct Model {
+struct Model {
   Matrix transform; // Local transform matrix
 
   int meshCount; // Number of meshes
@@ -285,54 +220,54 @@ typedef struct Model {
   int boneCount; // Number of bones
   BoneInfo *bones; // Bones information (skeleton)
   Transform *bindPose; // Bones base transformation (pose)
-} Model;
+};
 
 // ModelAnimation
-typedef struct ModelAnimation {
+struct ModelAnimation {
   int boneCount; // Number of bones
   int frameCount; // Number of animation frames
   BoneInfo *bones; // Bones information (skeleton)
   Transform **framePoses; // Poses array by frame
   char name[32]; // Animation name
-} ModelAnimation;
+};
 
 // Ray, ray for raycasting
-typedef struct Ray {
+struct Ray {
   Vector3 position; // Ray position (origin)
   Vector3 direction; // Ray direction (normalized)
-} Ray;
+};
 
 // RayCollision, ray hit information
-typedef struct RayCollision {
+struct RayCollision {
   bool hit; // Did the ray hit something?
   float distance; // Distance to the nearest hit
   Vector3 point; // Point of the nearest hit
   Vector3 normal; // Surface normal of hit
-} RayCollision;
+};
 
 // BoundingBox
-typedef struct BoundingBox {
+struct BoundingBox {
   Vector3 min; // Minimum vertex box-corner
   Vector3 max; // Maximum vertex box-corner
-} BoundingBox;
+};
 
 // Wave, audio wave data
-typedef struct Wave {
+struct Wave {
   unsigned int frameCount; // Total number of frames (considering channels)
   unsigned int sampleRate; // Frequency (samples per second)
   unsigned int
   sampleSize; // Bit depth (bits per sample): 8, 16, 32 (24 not supported)
   unsigned int channels; // Number of channels (1-mono, 2-stereo, ...)
   void *data; // Buffer data pointer
-} Wave;
+};
 
 // Opaque structs declaration
 // NOTE: Actual structs are defined internally in raudio module
-typedef struct rAudioBuffer rAudioBuffer;
-typedef struct rAudioProcessor rAudioProcessor;
+struct rAudioBuffer;
+struct rAudioProcessor;
 
 // AudioStream, custom audio stream
-typedef struct AudioStream {
+struct AudioStream {
   rAudioBuffer *buffer; // Pointer to internal data used by the audio system
   rAudioProcessor *
   processor; // Pointer to internal data processor, useful for audio effects
@@ -341,26 +276,26 @@ typedef struct AudioStream {
   unsigned int
   sampleSize; // Bit depth (bits per sample): 8, 16, 32 (24 not supported)
   unsigned int channels; // Number of channels (1-mono, 2-stereo, ...)
-} AudioStream;
+};
 
 // Sound
-typedef struct Sound {
+struct Sound {
   AudioStream stream; // Audio stream
   unsigned int frameCount; // Total number of frames (considering channels)
-} Sound;
+};
 
 // Music, audio stream, anything longer than ~10 seconds should be streamed
-typedef struct Music {
+struct Music {
   AudioStream stream; // Audio stream
   unsigned int frameCount; // Total number of frames (considering channels)
   bool looping; // Music looping enable
 
   int ctxType; // Type of music context (audio filetype)
   void *ctxData; // Audio context data, depends on type
-} Music;
+};
 
 // VrDeviceInfo, Head-Mounted-Display device parameters
-typedef struct VrDeviceInfo {
+struct VrDeviceInfo {
   int hResolution; // Horizontal resolution in pixels
   int vResolution; // Vertical resolution in pixels
   float hScreenSize; // Horizontal size in meters
@@ -370,10 +305,10 @@ typedef struct VrDeviceInfo {
   float interpupillaryDistance; // IPD (distance between pupils) in meters
   float lensDistortionValues[4]; // Lens distortion constant parameters
   float chromaAbCorrection[4]; // Chromatic aberration correction parameters
-} VrDeviceInfo;
+};
 
 // VrStereoConfig, VR stereo rendering configuration for simulator
-typedef struct VrStereoConfig {
+struct VrStereoConfig {
   Matrix projection[2]; // VR projection matrices (per eye)
   Matrix viewOffset[2]; // VR view offset matrices (per eye)
   float leftLensCenter[2]; // VR left lens center
@@ -382,28 +317,28 @@ typedef struct VrStereoConfig {
   float rightScreenCenter[2]; // VR right screen center
   float scale[2]; // VR distortion scale
   float scaleIn[2]; // VR distortion scale in
-} VrStereoConfig;
+};
 
 // File path list
-typedef struct FilePathList {
+struct FilePathList {
   unsigned int capacity; // Filepaths max entries
   unsigned int count; // Filepaths entries count
   char **paths; // Filepaths entries
-} FilePathList;
+};
 
 // Automation event
-typedef struct AutomationEvent {
+struct AutomationEvent {
   unsigned int frame; // Event frame
   unsigned int type; // Event type (AutomationEventType)
   int params[4]; // Event parameters (if required)
-} AutomationEvent;
+};
 
 // Automation event list
-typedef struct AutomationEventList {
+struct AutomationEventList {
   unsigned int capacity; // Events max entries (MAX_AUTOMATION_EVENTS)
   unsigned int count; // Events entries count
   AutomationEvent *events; // Events entries
-} AutomationEventList;
+};
 
 //----------------------------------------------------------------------------------
 // Enumerators Definition
@@ -411,7 +346,7 @@ typedef struct AutomationEventList {
 // System/Window config flags
 // NOTE: Every bit registers one state (use it with bit masks)
 // By default all flags are set to 0
-typedef enum {
+enum ConfigFlags {
   FLAG_VSYNC_HINT = 0x00000040, // Set to try enabling V-Sync on GPU
   FLAG_FULLSCREEN_MODE = 0x00000002, // Set to run program in fullscreen
   FLAG_WINDOW_RESIZABLE = 0x00000004, // Set to allow resizable window
@@ -435,11 +370,11 @@ typedef enum {
   FLAG_MSAA_4X_HINT = 0x00000020, // Set to try enabling MSAA 4X
   FLAG_INTERLACED_HINT =
   0x00010000 // Set to try enabling interlaced video format (for V3D)
-} ConfigFlags;
+};
 
 // Trace log level
 // NOTE: Organized by priority level
-typedef enum {
+enum TraceLogLevel {
   LOG_ALL = 0, // Display all logs
   LOG_TRACE, // Trace logging, intended for internal use only
   LOG_DEBUG, // Debug logging, used for internal debugging, it should be
@@ -449,12 +384,12 @@ typedef enum {
   LOG_ERROR, // Error logging, used on unrecoverable failures
   LOG_FATAL, // Fatal logging, used to abort program: exit(EXIT_FAILURE)
   LOG_NONE // Disable logging
-} TraceLogLevel;
+};
 
 // Keyboard keys (US keyboard layout)
 // NOTE: Use GetKeyPressed() to allow redefining
 // required keys for alternative layouts
-typedef enum {
+enum KeyboardKey {
   KEY_NULL = 0, // Key: NULL, used for no key pressed
   // Alphanumeric keys
   KEY_APOSTROPHE = 39, // Key: '
@@ -569,10 +504,10 @@ typedef enum {
   KEY_MENU = 5, // Key: Android menu button
   KEY_VOLUME_UP = 24, // Key: Android volume up button
   KEY_VOLUME_DOWN = 25 // Key: Android volume down button
-} KeyboardKey;
+};
 
 // Mouse buttons
-typedef enum {
+enum MouseButton {
   MOUSE_BUTTON_LEFT = 0, // Mouse button left
   MOUSE_BUTTON_RIGHT = 1, // Mouse button right
   MOUSE_BUTTON_MIDDLE = 2, // Mouse button middle (pressed wheel)
@@ -580,10 +515,10 @@ typedef enum {
   MOUSE_BUTTON_EXTRA = 4, // Mouse button extra (advanced mouse device)
   MOUSE_BUTTON_FORWARD = 5, // Mouse button forward (advanced mouse device)
   MOUSE_BUTTON_BACK = 6, // Mouse button back (advanced mouse device)
-} MouseButton;
+};
 
 // Mouse cursor
-typedef enum {
+enum MouseCursor {
   MOUSE_CURSOR_DEFAULT = 0, // Default pointer shape
   MOUSE_CURSOR_ARROW = 1, // Arrow shape
   MOUSE_CURSOR_IBEAM = 2, // Text writing cursor shape
@@ -597,10 +532,10 @@ typedef enum {
   8, // The top-right to bottom-left diagonal resize/move arrow shape
   MOUSE_CURSOR_RESIZE_ALL = 9, // The omnidirectional resize/move cursor shape
   MOUSE_CURSOR_NOT_ALLOWED = 10 // The operation-not-allowed shape
-} MouseCursor;
+};
 
 // Gamepad buttons
-typedef enum {
+enum GamepadButton {
   GAMEPAD_BUTTON_UNKNOWN = 0, // Unknown button, just for error checking
   GAMEPAD_BUTTON_LEFT_FACE_UP, // Gamepad left DPAD up button
   GAMEPAD_BUTTON_LEFT_FACE_RIGHT, // Gamepad left DPAD right button
@@ -630,10 +565,10 @@ typedef enum {
   // Start)
   GAMEPAD_BUTTON_LEFT_THUMB, // Gamepad joystick pressed button left
   GAMEPAD_BUTTON_RIGHT_THUMB // Gamepad joystick pressed button right
-} GamepadButton;
+};
 
 // Gamepad axis
-typedef enum {
+enum GamepadAxis {
   GAMEPAD_AXIS_LEFT_X = 0, // Gamepad left stick X axis
   GAMEPAD_AXIS_LEFT_Y = 1, // Gamepad left stick Y axis
   GAMEPAD_AXIS_RIGHT_X = 2, // Gamepad right stick X axis
@@ -642,10 +577,10 @@ typedef enum {
   4, // Gamepad back trigger left, pressure level: [1..-1]
   GAMEPAD_AXIS_RIGHT_TRIGGER =
   5 // Gamepad back trigger right, pressure level: [1..-1]
-} GamepadAxis;
+};
 
 // Material map index
-typedef enum {
+enum MaterialMapIndex {
   MATERIAL_MAP_ALBEDO = 0, // Albedo material (same as: MATERIAL_MAP_DIFFUSE)
   MATERIAL_MAP_METALNESS, // Metalness material (same as: MATERIAL_MAP_SPECULAR)
   MATERIAL_MAP_NORMAL, // Normal material
@@ -658,13 +593,10 @@ typedef enum {
   // GL_TEXTURE_CUBE_MAP)
   MATERIAL_MAP_PREFILTER, // Prefilter material (NOTE: Uses GL_TEXTURE_CUBE_MAP)
   MATERIAL_MAP_BRDF // Brdf material
-} MaterialMapIndex;
-
-#define MATERIAL_MAP_DIFFUSE MATERIAL_MAP_ALBEDO
-#define MATERIAL_MAP_SPECULAR MATERIAL_MAP_METALNESS
+};
 
 // Shader location index
-typedef enum {
+enum ShaderLocationIndex {
   SHADER_LOC_VERTEX_POSITION = 0, // Shader location: vertex attribute: position
   SHADER_LOC_VERTEX_TEXCOORD01, // Shader location: vertex attribute: texcoord01
   SHADER_LOC_VERTEX_TEXCOORD02, // Shader location: vertex attribute: texcoord02
@@ -700,13 +632,10 @@ typedef enum {
   // boneWeights
   SHADER_LOC_BONE_MATRICES // Shader location: array of matrices uniform:
   // boneMatrices
-} ShaderLocationIndex;
-
-#define SHADER_LOC_MAP_DIFFUSE SHADER_LOC_MAP_ALBEDO
-#define SHADER_LOC_MAP_SPECULAR SHADER_LOC_MAP_METALNESS
+};
 
 // Shader uniform data type
-typedef enum {
+enum ShaderUniformDataType {
   SHADER_UNIFORM_FLOAT = 0, // Shader uniform type: float
   SHADER_UNIFORM_VEC2, // Shader uniform type: vec2 (2 float)
   SHADER_UNIFORM_VEC3, // Shader uniform type: vec3 (3 float)
@@ -716,19 +645,19 @@ typedef enum {
   SHADER_UNIFORM_IVEC3, // Shader uniform type: ivec3 (3 int)
   SHADER_UNIFORM_IVEC4, // Shader uniform type: ivec4 (4 int)
   SHADER_UNIFORM_SAMPLER2D // Shader uniform type: sampler2d
-} ShaderUniformDataType;
+};
 
 // Shader attribute data types
-typedef enum {
+enum ShaderAttributeDataType {
   SHADER_ATTRIB_FLOAT = 0, // Shader attribute type: float
   SHADER_ATTRIB_VEC2, // Shader attribute type: vec2 (2 float)
   SHADER_ATTRIB_VEC3, // Shader attribute type: vec3 (3 float)
   SHADER_ATTRIB_VEC4 // Shader attribute type: vec4 (4 float)
-} ShaderAttributeDataType;
+};
 
 // Pixel formats
 // NOTE: Support depends on OpenGL version and platform
-typedef enum {
+enum PixelFormat {
   PIXELFORMAT_UNCOMPRESSED_GRAYSCALE = 1, // 8 bit per pixel (no alpha)
   PIXELFORMAT_UNCOMPRESSED_GRAY_ALPHA, // 8*2 bpp (2 channels)
   PIXELFORMAT_UNCOMPRESSED_R5G6B5, // 16 bpp
@@ -753,31 +682,31 @@ typedef enum {
   PIXELFORMAT_COMPRESSED_PVRT_RGBA, // 4 bpp
   PIXELFORMAT_COMPRESSED_ASTC_4x4_RGBA, // 8 bpp
   PIXELFORMAT_COMPRESSED_ASTC_8x8_RGBA // 2 bpp
-} PixelFormat;
+};
 
 // Texture parameters: filter mode
 // NOTE 1: Filtering considers mipmaps if available in the texture
 // NOTE 2: Filter is accordingly set for minification and magnification
-typedef enum {
+enum TextureFilter {
   TEXTURE_FILTER_POINT = 0, // No filter, just pixel approximation
   TEXTURE_FILTER_BILINEAR, // Linear filtering
   TEXTURE_FILTER_TRILINEAR, // Trilinear filtering (linear with mipmaps)
   TEXTURE_FILTER_ANISOTROPIC_4X, // Anisotropic filtering 4x
   TEXTURE_FILTER_ANISOTROPIC_8X, // Anisotropic filtering 8x
   TEXTURE_FILTER_ANISOTROPIC_16X, // Anisotropic filtering 16x
-} TextureFilter;
+};
 
 // Texture parameters: wrap mode
-typedef enum {
+enum TextureWrap {
   TEXTURE_WRAP_REPEAT = 0, // Repeats texture in tiled mode
   TEXTURE_WRAP_CLAMP, // Clamps texture to edge pixel in tiled mode
   TEXTURE_WRAP_MIRROR_REPEAT, // Mirrors and repeats the texture in tiled mode
   TEXTURE_WRAP_MIRROR_CLAMP // Mirrors and clamps to border the texture in tiled
   // mode
-} TextureWrap;
+};
 
 // Cubemap layouts
-typedef enum {
+enum CubemapLayout {
   CUBEMAP_LAYOUT_AUTO_DETECT = 0, // Automatically detect layout type
   CUBEMAP_LAYOUT_LINE_VERTICAL, // Layout is defined by a vertical line with
   // faces
@@ -787,17 +716,17 @@ typedef enum {
   // cubemap faces
   CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE // Layout is defined by a 4x3 cross with
   // cubemap faces
-} CubemapLayout;
+};
 
 // Font type, defines generation method
-typedef enum {
+enum FontType {
   FONT_DEFAULT = 0, // Default font generation, anti-aliased
   FONT_BITMAP, // Bitmap font generation, no anti-aliasing
   FONT_SDF // SDF font generation, requires external shader
-} FontType;
+};
 
 // Color blending modes (pre-defined)
-typedef enum {
+enum BlendMode {
   BLEND_ALPHA = 0, // Blend textures considering alpha (default)
   BLEND_ADDITIVE, // Blend textures adding colors
   BLEND_MULTIPLIED, // Blend textures multiplying colors
@@ -808,11 +737,11 @@ typedef enum {
   // rlSetBlendFactors())
   BLEND_CUSTOM_SEPARATE // Blend textures using custom rgb/alpha separate
   // src/dst factors (use rlSetBlendFactorsSeparate())
-} BlendMode;
+};
 
 // Gesture
 // NOTE: Provided as bit-wise flags to enable only desired gestures
-typedef enum {
+enum Gesture {
   GESTURE_NONE = 0, // No gesture
   GESTURE_TAP = 1, // Tap gesture
   GESTURE_DOUBLETAP = 2, // Double tap gesture
@@ -824,51 +753,68 @@ typedef enum {
   GESTURE_SWIPE_DOWN = 128, // Swipe down gesture
   GESTURE_PINCH_IN = 256, // Pinch in gesture
   GESTURE_PINCH_OUT = 512 // Pinch out gesture
-} Gesture;
+};
 
 // Camera system modes
-typedef enum {
+enum CameraMode {
   CAMERA_CUSTOM =
   0, // Camera custom, controlled by user (UpdateCamera() does nothing)
   CAMERA_FREE, // Camera free mode
   CAMERA_ORBITAL, // Camera orbital, around target, zoom supported
   CAMERA_FIRST_PERSON, // Camera first person
   CAMERA_THIRD_PERSON // Camera third person
-} CameraMode;
+};
 
 // Camera projection
-typedef enum {
+enum CameraProjection {
   CAMERA_PERSPECTIVE = 0, // Perspective projection
   CAMERA_ORTHOGRAPHIC // Orthographic projection
-} CameraProjection;
+};
 
 // N-patch layout
-typedef enum {
+enum NPatchLayout {
   NPATCH_NINE_PATCH = 0, // Npatch layout: 3x3 tiles
   NPATCH_THREE_PATCH_VERTICAL, // Npatch layout: 1x3 tiles
   NPATCH_THREE_PATCH_HORIZONTAL // Npatch layout: 3x1 tiles
-} NPatchLayout;
+};
 
 // Callbacks to hook some internal functions
 // WARNING: These callbacks are intended for advanced users
-typedef void (*TraceLogCallback)(
-    int logLevel, const char *text,
-    va_list args); // Logging: Redirect trace log messages
-typedef unsigned char *(*LoadFileDataCallback)(
-    const char *fileName, int *dataSize); // FileIO: Load binary data
-typedef bool (*SaveFileDataCallback)(const char *fileName, void *data,
-                                     int dataSize); // FileIO: Save binary data
-typedef char *(*LoadFileTextCallback)(
-    const char *fileName); // FileIO: Load text data
-typedef bool (*SaveFileTextCallback)(const char *fileName,
-                                     char *text); // FileIO: Save text data
+using TraceLogCallback = void (*)(int logLevel, const char *text, va_list args);
+using LoadFileDataCallback = unsigned char *(*)(const char *fileName, int *dataSize);
+using SaveFileDataCallback = bool (*)(const char *fileName, void *data, int dataSize);
+using LoadFileTextCallback = char *(*)(const char *fileName);
+using SaveFileTextCallback = bool (*)(const char *fileName, char *text);
 
-#endif // RAYLIB_H
+#ifndef RAYLIB_H
+static constexpr Color LIGHTGRAY = {200, 200, 200, 255};
+static constexpr Color GRAY = {130, 130, 130, 255};
+static constexpr Color DARKGRAY = {80, 80, 80, 255};
+static constexpr Color YELLOW = {253, 249, 0, 255};
+static constexpr Color GOLD = {255, 203, 0, 255};
+static constexpr Color ORANGE = {255, 161, 0, 255};
+static constexpr Color PINK = {255, 109, 194, 255};
+static constexpr Color RED = {230, 41, 55, 255};
+static constexpr Color MAROON = {190, 33, 55, 255};
+static constexpr Color GREEN = {0, 228, 48, 255};
+static constexpr Color LIME = {0, 158, 47, 255};
+static constexpr Color DARKGREEN = {0, 117, 44, 255};
+static constexpr Color SKYBLUE = {102, 191, 255, 255};
+static constexpr Color BLUE = {0, 121, 241, 255};
+static constexpr Color DARKBLUE = {0, 82, 172, 255};
+static constexpr Color PURPLE = {200, 122, 255, 255};
+static constexpr Color VIOLET = {135, 60, 190, 255};
+static constexpr Color DARKPURPLE = {112, 31, 126, 255};
+static constexpr Color BEIGE = {211, 176, 131, 255};
+static constexpr Color BROWN = {127, 106, 79, 255};
+static constexpr Color DARKBROWN = {76, 63, 47, 255};
+static constexpr Color WHITE = {255, 255, 255, 255};
+static constexpr Color BLACK = {0, 0, 0, 255};
+static constexpr Color BLANK = {0, 0, 0, 0};
+static constexpr Color MAGENTA = {255, 0, 255, 255};
+static constexpr Color RAYWHITE = {245, 245, 245, 255};
+#endif
 
-#ifndef RAYLIB_HPP
-#define RAYLIB_HPP
-
-namespace rl {
 void init_window(int width, int height, const char *title);
 void close_window();
 bool window_should_close();
@@ -911,7 +857,8 @@ bool check_collision_point_line(Vector2 point, Vector2 p1, Vector2 p2, int thres
 
 Font get_font_default();
 void draw_text(const char *text, int x, int y, int size, Color color);
-void draw_text_ex(Font font, const char *text, Vector2 pos, float size, float spacing, Color color);
+void draw_text_ex(const Font &font, const char *text, Vector2 pos, float size, float spacing,
+                  Color color);
 }
 
 #endif // RAYLIB_HPP

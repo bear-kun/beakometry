@@ -19,7 +19,7 @@ int main() {
     toolbar::listen();
 
     rl::begin_drawing();
-    rl::clear_background(WHITE);
+    rl::clear_background(rl::WHITE);
     board::draw();
     toolbar::draw();
     rl::end_drawing();

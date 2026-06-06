@@ -17,8 +17,8 @@ static constexpr std::array<ToolInit, TOOL_COUNT> tool_init = {
 
 
 static struct {
-  Rectangle window{};
-  Color bkg_color = DARKGRAY;
+  rl::Rectangle window{};
+  Color bkg_color = rl::DARKGRAY;
 
   GeomTool *selected = nullptr;
   std::array<ToolPtr, TOOL_COUNT> tools;
@@ -39,7 +39,7 @@ void cleanup() {
 void listen() {
   const Vec2 pos = rl::get_mouse_position();
   if (!rl::check_collision_point_rec(pos, toolbar.window)) return;
-  if (!rl::is_mouse_button_pressed(MOUSE_BUTTON_LEFT)) return;
+  if (!rl::is_mouse_button_pressed(rl::MOUSE_BUTTON_LEFT)) return;
 
   const int x = (int)pos.x;
   const int y = (int)pos.y;
@@ -61,13 +61,13 @@ void draw() {
 
   int x = TOOL_ICON_BORDER_X;
   for (int i = 0; i < TOOL_COUNT; i++) {
-    rl::draw_rectangle(x, TOOL_ICON_BORDER_Y, TOOL_ICON_SIZE, TOOL_ICON_SIZE, WHITE);
+    rl::draw_rectangle(x, TOOL_ICON_BORDER_Y, TOOL_ICON_SIZE, TOOL_ICON_SIZE, rl::WHITE);
     x += TOOL_ICON_SIZE + TOOL_ICON_BORDER_X;
   }
 
   if (toolbar.selected) {
     rl::draw_text(toolbar.selected->usage.c_str(), TOOL_ICON_BORDER_X,
-                  TOOL_ICON_BORDER_Y * 3 + TOOL_ICON_SIZE, 30, GREEN);
+                  TOOL_ICON_BORDER_Y * 3 + TOOL_ICON_SIZE, 30, rl::GREEN);
   }
 }
 }

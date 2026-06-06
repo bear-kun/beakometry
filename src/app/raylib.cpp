@@ -1,14 +1,21 @@
 extern "C" {
 #include "raylib.h"
 }
+
 #include "raylib.hpp"
 
 namespace rl {
+template <typename R, typename T>
+static const R &cast(const T &v) {
+  static_assert(sizeof(T) == sizeof(R));
+  return reinterpret_cast<const R &>(v);
+}
+
 void init_window(int width, int height, const char *title) { InitWindow(width, height, title); }
 void close_window() { CloseWindow(); }
 bool window_should_close() { return WindowShouldClose(); }
 
-void clear_background(Color color) { ClearBackground(color); }
+void clear_background(Color color) { ClearBackground(cast<::Color>(color)); }
 void begin_drawing() { BeginDrawing(); }
 void end_drawing() { EndDrawing(); }
 
@@ -24,63 +31,72 @@ bool is_mouse_button_pressed(int button) { return IsMouseButtonPressed(button); 
 bool is_mouse_button_down(int button) { return IsMouseButtonDown(button); }
 bool is_mouse_button_released(int button) { return IsMouseButtonReleased(button); }
 bool is_mouse_button_up(int button) { return IsMouseButtonUp(button); }
-Vector2 get_mouse_position() { return GetMousePosition(); }
-Vector2 get_mouse_delta() { return GetMouseDelta(); }
+Vector2 get_mouse_position() { return cast<Vector2>(GetMousePosition()); }
+Vector2 get_mouse_delta() { return cast<Vector2>(GetMouseDelta()); }
 
 void set_mouse_cursor(int cursor) { SetMouseCursor(cursor); }
 
-void draw_line_v(Vector2 start, Vector2 end, Color color) { DrawLineV(start, end, color); }
+void draw_line_v(Vector2 start, Vector2 end, Color color) {
+  DrawLineV(cast<::Vector2>(start), cast<::Vector2>(end), cast<::Color>(color));
+}
 
 void draw_line_ex(Vector2 start, Vector2 end, float thick, Color color) {
-  DrawLineEx(start, end, thick, color);
+  DrawLineEx(cast<::Vector2>(start), cast<::Vector2>(end), thick, cast<::Color>(color));
 }
 
 void draw_circle_v(Vector2 center, float radius, Color color) {
-  DrawCircleV(center, radius, color);
+  DrawCircleV(cast<::Vector2>(center), radius, cast<::Color>(color));
 }
 
 void draw_circle_lines_v(Vector2 center, float radius, Color color) {
-  DrawCircleLinesV(center, radius, color);
+  DrawCircleLinesV(cast<::Vector2>(center), radius, cast<::Color>(color));
 }
 
 void draw_ring(Vector2 center, float inner_radius, float outer_radius, float start_angle,
                float end_angle, int segments, Color color) {
-  DrawRing(center, inner_radius, outer_radius, start_angle, end_angle, segments, color);
+  DrawRing(cast<::Vector2>(center), inner_radius, outer_radius, start_angle, end_angle, segments,
+           cast<::Color>(color));
 }
 
 void draw_ring_lines(Vector2 center, float inner_radius, float outer_radius, float start_angle,
                      float end_angle, int segments, Color color) {
-  DrawRingLines(center, inner_radius, outer_radius, start_angle, end_angle, segments, color);
+  DrawRingLines(cast<::Vector2>(center), inner_radius, outer_radius, start_angle, end_angle,
+                segments, cast<::Color>(color));
 }
 
 void draw_rectangle(int x, int y, int width, int height, Color color) {
-  DrawRectangle(x, y, width, height, color);
+  DrawRectangle(x, y, width, height, cast<::Color>(color));
 }
 
 void draw_rectangle_v(Vector2 pos, Vector2 size, Color color) {
-  DrawRectangleV(pos, size, color);
+  DrawRectangleV(cast<::Vector2>(pos), cast<::Vector2>(size), cast<::Color>(color));
 }
 
-void draw_rectangle_rec(Rectangle rec, Color color) { DrawRectangleRec(rec, color); }
+void draw_rectangle_rec(Rectangle rec, Color color) {
+  DrawRectangleRec(cast<::Rectangle>(rec), cast<::Color>(color));
+}
 
 bool check_collision_point_rec(Vector2 point, Rectangle rec) {
-  return CheckCollisionPointRec(point, rec);
+  return CheckCollisionPointRec(cast<::Vector2>(point), cast<::Rectangle>(rec));
 }
 
 bool check_collision_point_circle(Vector2 point, Vector2 center, float radius) {
-  return CheckCollisionPointCircle(point, center, radius);
+  return CheckCollisionPointCircle(cast<::Vector2>(point), cast<::Vector2>(center), radius);
 }
 
 bool check_collision_point_line(Vector2 point, Vector2 p1, Vector2 p2, int threshold) {
-  return CheckCollisionPointLine(point, p1, p2, threshold);
+  return CheckCollisionPointLine(cast<::Vector2>(point), cast<::Vector2>(p1), cast<::Vector2>(p2),
+                                 threshold);
 }
 
-Font get_font_default() { return GetFontDefault(); }
+Font get_font_default() { return cast<Font>(GetFontDefault()); }
 
 void draw_text(const char *text, int x, int y, int size, Color color) {
-  DrawText(text, x, y, size, color);
+  DrawText(text, x, y, size, cast<::Color>(color));
 }
 
-void draw_text_ex(Font font, const char *text, Vector2 pos, float size, float spacing,
-                  Color color) { DrawTextEx(font, text, pos, size, spacing, color); }
+void draw_text_ex(const Font &font, const char *text, Vector2 pos, float size, float spacing,
+                  Color color) {
+  DrawTextEx(cast<::Font>(font), text, cast<::Vector2>(pos), size, spacing, cast<::Color>(color));
+}
 }

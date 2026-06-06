@@ -2,6 +2,9 @@
 #include "graph.h"
 #include <math.h>
 
+static const float HUGE_VALUE = 4096.f;
+static const float EPS = 1e-5f;
+
 CGeometry *geom_get_object(GeomId id);
 
 static void copy_args(GeomId *dst, const GeomId *src, const int n) {
