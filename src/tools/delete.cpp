@@ -19,7 +19,7 @@ public:
   }
 };
 
-ToolPtr delete_() {
+ToolPtr tool_delete() {
   return std::make_unique<Delete>();
 }
 }

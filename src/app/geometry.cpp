@@ -83,9 +83,9 @@ void Geometry::init(const GeomId cid, const Transform &xform) {
   version = 0;
   type = geom_get_type(cid);
   if (type == POINT) {
-    color = {0, 82, 172, 255};
+    color = rl::DARKBLUE;
   } else {
-    color = {130, 130, 130, 255};
+    color = rl::GRAY;
   }
 
   get_default_name(name, type);

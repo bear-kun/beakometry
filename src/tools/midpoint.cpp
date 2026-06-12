@@ -45,7 +45,7 @@ private:
   GeomId first = -1;
 };
 
-ToolPtr midpoint() {
+ToolPtr tool_midpoint() {
   return std::make_unique<Midpoint>();
 }
 }

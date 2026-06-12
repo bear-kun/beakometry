@@ -30,7 +30,7 @@ public:
   }
 };
 
-ToolPtr point() {
+ToolPtr tool_point() {
   return std::make_unique<Point>();
 }
 }

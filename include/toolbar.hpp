@@ -20,18 +20,18 @@ void draw();
 void cleanup();
 
 using ToolPtr = std::unique_ptr<GeomTool>;
-ToolPtr angle_bisector();
-ToolPtr circle();
-ToolPtr circumcircle();
-ToolPtr delete_();
-ToolPtr intersection();
-ToolPtr line();
-ToolPtr midpoint();
-ToolPtr move();
-ToolPtr parallel();
-ToolPtr perpendicular();
-ToolPtr point();
-ToolPtr tangent();
+ToolPtr tool_angle_bisector();
+ToolPtr tool_circle();
+ToolPtr tool_circumcircle();
+ToolPtr tool_delete();
+ToolPtr tool_intersection();
+ToolPtr tool_line();
+ToolPtr tool_midpoint();
+ToolPtr tool_move();
+ToolPtr tool_parallel();
+ToolPtr tool_perpendicular();
+ToolPtr tool_point();
+ToolPtr tool_tangent();
 }
 
 #endif // GGB_TOOLBAR_H

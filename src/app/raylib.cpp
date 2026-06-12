@@ -94,6 +94,10 @@ const Font &get_font_default() {
   return font;
 }
 
+Vector2 measure_text_ex(const Font &font, const char *text, float fontSize, float spacing) {
+  return cast<Vector2>(MeasureTextEx(cast<::Font>(font), text, fontSize, spacing));
+}
+
 void draw_text(const char *text, int x, int y, int size, Color color) {
   DrawText(text, x, y, size, cast<::Color>(color));
 }

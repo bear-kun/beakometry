@@ -63,7 +63,7 @@ private:
   GeomType first_t = UNKNOWN;
 };
 
-ToolPtr parallel() {
+ToolPtr tool_parallel() {
   return std::make_unique<Parallel>();
 }
 }

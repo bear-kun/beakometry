@@ -63,7 +63,7 @@ private:
   GeomType first_t = UNKNOWN;
 };
 
-ToolPtr tangent() {
+ToolPtr tool_tangent() {
   return std::make_unique<Tangent>();
 }
 }

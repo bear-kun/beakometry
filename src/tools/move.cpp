@@ -47,7 +47,7 @@ private:
   Vec2 from{};
 };
 
-ToolPtr move() {
+ToolPtr tool_move() {
   return std::make_unique<Move>();
 }
 }

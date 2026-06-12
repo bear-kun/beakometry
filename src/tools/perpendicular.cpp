@@ -63,7 +63,7 @@ private:
   GeomType first_t = UNKNOWN;
 };
 
-ToolPtr perpendicular() {
+ToolPtr tool_perpendicular() {
   return std::make_unique<Perpendicular>();
 }
 }

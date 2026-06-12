@@ -54,7 +54,7 @@ private:
   GeomId points[3] = {-1, -1, -1};
 };
 
-ToolPtr circumcircle() {
+ToolPtr tool_circumcircle() {
   return std::make_unique<Circumcircle>();
 }
 }

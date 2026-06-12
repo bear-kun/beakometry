@@ -45,7 +45,7 @@ private:
   GeomId center = -1;
 };
 
-ToolPtr circle() {
+ToolPtr tool_circle() {
   return std::make_unique<Circle>();
 }
 }

@@ -45,7 +45,7 @@ private:
   GeomId first = -1;
 };
 
-ToolPtr line() {
+ToolPtr tool_line() {
   return std::make_unique<Line>();
 }
 }

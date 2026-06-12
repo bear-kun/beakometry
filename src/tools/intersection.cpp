@@ -45,7 +45,7 @@ private:
   GeomId first = -1;
 };
 
-ToolPtr intersection() {
+ToolPtr tool_intersection() {
   return std::make_unique<Intersection>();
 }
 }

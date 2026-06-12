@@ -45,7 +45,7 @@ private:
   GeomId first = -1;
 };
 
-ToolPtr angle_bisector() {
+ToolPtr tool_angle_bisector() {
   return std::make_unique<AngleBisector>();
 }
 }
