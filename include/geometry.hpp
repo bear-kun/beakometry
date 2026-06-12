@@ -1,39 +1,78 @@
 #ifndef GGB_GEOMETRY_HPP
 #define GGB_GEOMETRY_HPP
 
-#include "geometry.h"
+#include "types.h"
 #include "raylib.hpp"
-#include <string>
 
-namespace app {
+#include <array>
+#include <string>
+#include <vector>
+
+namespace geom {
 using Vec2 = rl::Vector2;
-using Color = rl::Color;
+
+static Vec2 operator+(const Vec2 &lhs, const Vec2 &rhs) {
+  return {lhs.x + rhs.x, lhs.y + rhs.y};
+}
+
+static Vec2 operator+(const Vec2 &lhs, const float rhs) {
+  return {lhs.x + rhs, lhs.y + rhs};
+}
+
+static Vec2 operator-(const Vec2 &lhs, const Vec2 &rhs) {
+  return {lhs.x - rhs.x, lhs.y - rhs.y};
+}
+
+static Vec2 operator-(const Vec2 &lhs, const float rhs) {
+  return {lhs.x - rhs, lhs.y - rhs};
+}
+
+static Vec2 operator*(const Vec2 &lhs, const float rhs) {
+  return {lhs.x * rhs, lhs.y * rhs};
+}
+
+static Vec2 operator/(const Vec2 &lhs, const float rhs) {
+  return {lhs.x / rhs, lhs.y / rhs};
+}
 
 class Transform {
 public:
-  Vec2 operator()(const float pt[2]) const;
+  Vec2 forth(const Vec2 &v) const;
+  float forth(const float v) const { return v * scale; }
+  Vec2 inv(const Vec2 &v) const;
 
-  float operator()(const float v) const { return v * scale; }
-
-  Vec2 inv(const Vec2 &pt) const;
+  Vec2 operator()(const Vec2 &v) const { return forth(v); }
+  float operator()(const float v) const { return forth(v); }
 
 private:
   float scale = 1.f;
-  float translate[2] = {0.f, 0.f};
   float rotate[2][2] = {{1.f, 0.f}, {0.f, 1.f}};
+  Vec2 translate = {0.f, 0.f};
 };
 
 class Geometry {
 public:
-  bool activated = false;
+  struct Data {
+    GeomId define;
+    GeomId soln_id;
+    std::array<GeomId, 5> args;
+  };
+
+  bool active = false;
   bool valid = false;
   bool selected = false;
+  GeomId id = -1;
   GeomType type;
   std::string name;
+  rl::Color color{};
+  Data data{};
 
-  void init(GeomId cid, const Transform &xform);
+  void init(GeomId id_, GeomType type_, const std::array<GeomId, 5> &args, GeomId define,
+            GeomId soln_id);
 
-  void update(GeomId cid, const Transform &xform);
+  void remove();
+
+  void update();
 
   bool hovered(Vec2 pos) const;
 
@@ -41,38 +80,67 @@ public:
 
   void draw_name() const;
 
-  void activate() { activated = true; };
+  bool visible() const { return active && valid; }
 
-  void deactivate() { activated = false; };
+  void activate();
+
+  void deactivate();
 
   void select() { selected = true; }
 
   void deselect() { selected = false; }
 
-  bool visible() const { return activated && valid; }
-
 private:
   using Point = Vec2;
 
-  struct Line {
-    Point point1, point2;
-  };
+  union Render {
+    Point pt;
 
-  struct Circle {
-    Point center;
-    float radius;
+    struct Line {
+      Point point1, point2;
+    } ln;
+
+    struct Circle {
+      Point center;
+      float radius;
+    } cr;
   };
 
   unsigned version = 0;
-  Color color{};
-  Vec2 name_pos{};
-
-  union {
-    Point pt;
-    Line ln;
-    Circle cr;
-  } geom{};
+  Render render{};
+  Point name_pos{};
 };
+
+class Handle {
+public:
+  Handle() : id(-1) {
+  }
+
+  explicit Handle(const GeomId id) : id(id) {
+  }
+
+  Geometry *operator->() const { return &objects[id]; }
+
+  GeomId get_id() const { return id; }
+
+  bool valid() const { return id != -1; }
+
+private:
+  static std::vector<Geometry> &objects;
+  GeomId id;
+};
+
+void init();
+void cleanup();
+void draw_all();
+void remove_all();
+void update_all();
+Handle get_hovered_object(Vec2 pos);
+
+Handle new_object(GeomType type, const std::array<GeomId, 5> &args, GeomId define = -1,
+                  GeomId soln_id = 0);
+
+void set_xform(const Transform &xform);
 
 }
 

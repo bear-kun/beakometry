@@ -4,6 +4,7 @@
 
 #include "board.hpp"
 #include <memory>
+#include <string>
 
 namespace app::toolbar {
 class GeomTool : public board::Control {

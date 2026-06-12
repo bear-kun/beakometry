@@ -1,10 +1,7 @@
-
 #ifndef GGB_TYPES_H
 #define GGB_TYPES_H
 
-#include <stddef.h>
-#include <stdint.h>
-#include <stdbool.h>
+#include <cstdint>
 
 typedef int32_t GeomInt;
 typedef int32_t GeomId;

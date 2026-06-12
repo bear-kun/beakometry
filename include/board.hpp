@@ -4,6 +4,8 @@
 #include "geometry.hpp"
 
 namespace app::board {
+using Vec2 = rl::Vector2;
+
 class Control {
 public:
   virtual ~Control() = default;
@@ -29,14 +31,7 @@ void listen();
 void draw();
 void cleanup();
 
-GeomId get_hovered_object();
-bool object_valid(GeomId id);
-void add_object(GeomId id);
-void activate_object(GeomId id);
-void deactivate_object(GeomId id);
-void select_object(GeomId id);
-void deselect_object(GeomId id);
-void update_objects();
+geom::Handle get_hovered_object();
 
 void set_control(Control &ctrl);
 Vec2 xform_to_world(Vec2 pos);

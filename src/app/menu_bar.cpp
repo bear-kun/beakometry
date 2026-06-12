@@ -4,6 +4,7 @@
 #include <array>
 
 namespace app::menu_bar {
+using Vec2 = rl::Vector2;
 using ItemInit = MenuItemPtr (*)();
 
 static constexpr int MENU_ITEM_COUNT = 2;
@@ -43,8 +44,8 @@ void listen() {
 }
 
 void draw() {
-  static constexpr Color bkg_color = rl::GRAY;
-  static constexpr Color text_color = rl::BLACK;
+  static constexpr rl::Color bkg_color = rl::GRAY;
+  static constexpr rl::Color text_color = rl::BLACK;
   static const rl::Font &font = rl::get_font_default();
 
   rl::draw_rectangle_rec(menu_bar.window, bkg_color);

@@ -1,11 +1,12 @@
 #ifndef GGB_CORE_INTERNAL_H
 #define GGB_CORE_INTERNAL_H
 
-#include "geometry.h"
+#include "geometry.hpp"
 
-typedef int (*ValueEval)(const float *inputs, float *outputs);
+namespace geom {
+using ValueEval = int (*)(const float *inputs, float *outputs);
 
-typedef enum {
+enum EvalType {
   EVAL_NULL,
   EVAL_POINT_ON_LINE,
   EVAL_POINT_ON_CIRCLE,
@@ -22,24 +23,24 @@ typedef enum {
   EVAL_INTERSECTION_LINE_LINE,
   EVAL_INTERSECTION_LINE_CIRCLE,
   EVAL_INTERSECTION_CIRCLE_CIRCLE,
-} EvalType;
+};
 
 extern const ValueEval eval_map[];
 
-CGeometry *geom_get_object(GeomId id);
-
-void computation_graph_init(GeomSize init_size);
-void computation_graph_cleanup();
-void computation_graph_clear();
-GeomId graph_add_value(float value);
-GeomId graph_add_constraint(GeomSize input_size, const GeomId *inputs,
-                            GeomSize output_size, const GeomId *outputs,
-                            EvalType eval);
-unsigned graph_get_version(GeomSize count, const GeomId *ids);
-bool graph_get_values(GeomSize count, const GeomId *ids, float *values);
-bool graph_is_degenerate(GeomId constr, GeomId soln_id);
-void graph_ref(GeomId id);
-void graph_unref(GeomId id);
-void graph_change_value(GeomSize count, const GeomId *ids, const float *values);
+namespace graph {
+void init(GeomSize init_size);
+void cleanup();
+void clear();
+GeomId add_value(float value = 0);
+GeomId add_constraint(GeomSize input_size, const GeomId *inputs,
+                      GeomSize output_size, const GeomId *outputs, EvalType eval);
+unsigned get_version(GeomSize count, const GeomId *ids);
+bool get_values(GeomSize count, const GeomId *ids, float *values);
+bool is_degenerate(GeomId constr, GeomId soln_id);
+void ref_node(GeomId id);
+void unref_node(GeomId id);
+void change_value(GeomSize count, const GeomId *ids, const float *values);
+}
+}
 
 #endif //GGB_CORE_INTERNAL_H

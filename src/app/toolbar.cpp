@@ -2,6 +2,7 @@
 #include <array>
 
 namespace app::toolbar {
+using Vec2 = rl::Vector2;
 using ToolInit = ToolPtr (*)();
 
 static constexpr int TOOL_COUNT = 12;
@@ -51,7 +52,7 @@ void listen() {
 }
 
 void draw() {
-  static constexpr Color bkg_color = rl::DARKGRAY;
+  static constexpr rl::Color bkg_color = rl::DARKGRAY;
 
   rl::draw_rectangle_rec(toolbar.window, bkg_color);
 
