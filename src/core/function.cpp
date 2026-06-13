@@ -473,8 +473,10 @@ std::array<Handle, 2> intersection(const Handle ln_or_cr1, const Handle ln_or_cr
 
   const GeomId define =
       graph::add_constraint(6, inputs, 4, args + 2, EVAL_INTERSECTION_LINE_CIRCLE);
-  return {new_object(POINT, args, define, 0),
-          new_object(POINT, args + 4, define, 1)};
+  return {
+      new_object(POINT, args, define, 0),
+      new_object(POINT, args + 4, define, 1)
+  };
 }
 
 // --- move ---

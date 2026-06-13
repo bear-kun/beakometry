@@ -82,10 +82,10 @@ public:
   bool active = false;
   bool valid = false;
   bool selected = false;
-  Handle handle;
   GeomType type;
-  std::string name;
+  Handle handle;
   rl::Color color{};
+  std::string name;
   Data data{};
 
   void init(GeomId id_, GeomType type_, const GeomId *args, GeomId define, GeomId soln_id);

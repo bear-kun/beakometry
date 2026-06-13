@@ -162,10 +162,10 @@ static void get_default_name(std::string &name, const GeomType type) {
 
 void Geometry::init(const GeomId id_, const GeomType type_, const GeomId *args,
                     const GeomId define, const GeomId soln_id) {
-  handle = Handle(id_);
   type = type_;
-  get_default_name(name, type_);
+  handle = Handle(id_);
   color = type_ == POINT ? rl::DARKBLUE : rl::GRAY;
+  get_default_name(name, type_);
 
   data.define = define;
   data.soln_id = soln_id;
