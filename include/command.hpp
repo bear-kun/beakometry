@@ -1,5 +1,5 @@
-#ifndef GGB_COMMAND_H
-#define GGB_COMMAND_H
+#ifndef BEAKOMETRY_COMMAND_HPP
+#define BEAKOMETRY_COMMAND_HPP
 
 #include "geometry.hpp"
 #include <memory>
@@ -57,4 +57,4 @@ void undo();
 void redo();
 }
 
-#endif //GGB_COMMAND_H
+#endif //BEAKOMETRY_COMMAND_HPP

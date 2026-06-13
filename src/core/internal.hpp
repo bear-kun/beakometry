@@ -1,5 +1,5 @@
-#ifndef GGB_CORE_INTERNAL_H
-#define GGB_CORE_INTERNAL_H
+#ifndef BEAKOMETRY_CORE_INTERNAL_HPP
+#define BEAKOMETRY_CORE_INTERNAL_HPP
 
 #include "geometry.hpp"
 
@@ -44,4 +44,4 @@ void change_value(GeomSize count, const GeomId *ids, const float *values);
 }
 }
 
-#endif //GGB_CORE_INTERNAL_H
+#endif //BEAKOMETRY_CORE_INTERNAL_HPP

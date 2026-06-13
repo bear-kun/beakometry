@@ -1,5 +1,5 @@
-#ifndef GGB_TYPES_H
-#define GGB_TYPES_H
+#ifndef BEAKOMETRY_TYPES_HPP
+#define BEAKOMETRY_TYPES_HPP
 
 #include <cstdint>
 
@@ -15,4 +15,4 @@ typedef enum {
   ANY = 7
 } GeomType;
 
-#endif //GGB_TYPES_H
+#endif //BEAKOMETRY_TYPES_HPP

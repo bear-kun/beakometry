@@ -1,6 +1,6 @@
 #include "cgraph/graph.h"
 #include "cgraph/iterator.h"
-#include "internal.h"
+#include "internal.hpp"
 #include <queue>
 
 namespace geom::graph {

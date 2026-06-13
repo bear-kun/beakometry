@@ -1,5 +1,5 @@
-#ifndef RAYLIB_HPP
-#define RAYLIB_HPP
+#ifndef BEAKOMETRY_RAYLIB_HPP
+#define BEAKOMETRY_RAYLIB_HPP
 
 #include <cstdarg>
 
@@ -862,4 +862,4 @@ void draw_text_ex(const Font &font, const char *text, Vector2 pos, float size, f
                   Color color);
 }
 
-#endif // RAYLIB_HPP
+#endif // BEAKOMETRY_RAYLIB_HPP

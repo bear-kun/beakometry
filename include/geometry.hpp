@@ -1,5 +1,5 @@
-#ifndef GGB_GEOMETRY_HPP
-#define GGB_GEOMETRY_HPP
+#ifndef BEAKOMETRY_GEOMETRY_HPP
+#define BEAKOMETRY_GEOMETRY_HPP
 
 #include "types.h"
 #include "raylib.hpp"
@@ -154,4 +154,4 @@ std::array<Handle, 2> intersection(Handle ln_or_cr1, Handle ln_or_cr2);
 void move(Handle pt, Vec2 to);
 }
 
-#endif //GGB_GEOMETRY_HPP
+#endif //BEAKOMETRY_GEOMETRY_HPP

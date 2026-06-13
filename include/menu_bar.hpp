@@ -1,5 +1,5 @@
-#ifndef GGB_MENU_BAR_HPP
-#define GGB_MENU_BAR_HPP
+#ifndef BEAKOMETRY_MENU_BAR_HPP
+#define BEAKOMETRY_MENU_BAR_HPP
 
 #include <string>
 #include <memory>
@@ -24,4 +24,4 @@ MenuItemPtr item_load();
 
 }
 
-#endif //GGB_MENU_BAR_HPP
+#endif //BEAKOMETRY_MENU_BAR_HPP

@@ -1,5 +1,5 @@
-#ifndef GGB_TOOLBAR_H
-#define GGB_TOOLBAR_H
+#ifndef BEAKOMETRY_TOOLBAR_HPP
+#define BEAKOMETRY_TOOLBAR_HPP
 
 
 #include "board.hpp"
@@ -35,4 +35,4 @@ ToolPtr tool_point();
 ToolPtr tool_tangent();
 }
 
-#endif // GGB_TOOLBAR_H
+#endif // BEAKOMETRY_TOOLBAR_HPP

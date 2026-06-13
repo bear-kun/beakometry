@@ -1,5 +1,5 @@
-#ifndef GGB_BOARD_H
-#define GGB_BOARD_H
+#ifndef BEAKOMETRY_BOARD_HPP
+#define BEAKOMETRY_BOARD_HPP
 
 #include "geometry.hpp"
 
@@ -35,4 +35,4 @@ void set_control(Control &ctrl);
 Vec2 xform_to_world(Vec2 pos);
 }
 
-#endif // GGB_BOARD_H
+#endif // BEAKOMETRY_BOARD_HPP

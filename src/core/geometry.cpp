@@ -1,5 +1,5 @@
 #include "geometry.hpp"
-#include "internal.h"
+#include "internal.hpp"
 #include <cmath>
 
 namespace geom {
